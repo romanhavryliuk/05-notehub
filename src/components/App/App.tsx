@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
-import { fetchNotes, deleteNote, createNote } from "../../services/noteService";
+import { fetchNotes, deleteNote } from "../../services/noteService";
 import SearchBox from "../SearchBox/SearchBox";
 import NoteList from "../NoteList/NoteList";
 import Pagination from "../Pagination/Pagination";
 import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
-import type { NoteTag } from "../../types/note";
 import css from "./App.module.css";
 
 export default function App() {
@@ -20,21 +19,13 @@ export default function App() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", page, search],
     queryFn: () => fetchNotes(page, search),
+    placeholderData: keepPreviousData,
   });
 
   const { mutate: deleteNoteMutation } = useMutation({
     mutationFn: (id: string) => deleteNote(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
-  });
-
-  const { mutate: createNoteMutation } = useMutation({
-    mutationFn: (newNote: { title: string; content: string; tag: NoteTag }) =>
-      createNote(newNote),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      setIsModalOpen(false);
     },
   });
 
@@ -75,10 +66,7 @@ export default function App() {
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
-          <NoteForm
-            onSubmit={createNoteMutation}
-            onCancel={() => setIsModalOpen(false)}
-          />
+          <NoteForm onSuccess={() => setIsModalOpen(false)} onCancel={() => setIsModalOpen(false)} />
         </Modal>
       )}
     </div>

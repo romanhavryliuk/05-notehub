@@ -34,7 +34,7 @@ export const deleteNote = async (id: string): Promise<Note> => {
   return response.data;
 };
 
-type NewNote = Omit<Note, "id">;
+type NewNote = Omit<Note, "id" | "createdAt" | "updatedAt">;
 
 export const createNote = async (noteData: NewNote): Promise<Note> => {
   const response = await noteApi.post<Note>("/notes", noteData);
