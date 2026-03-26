@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNote } from "../../services/noteService";
 import type { Note } from "../../types/note";
 import css from "./NoteList.module.css";
@@ -21,7 +20,6 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
             <button
               className={css.button}
               onClick={() => onDelete(id)}
-              disabled={isPending}
             >
               Delete
             </button>
