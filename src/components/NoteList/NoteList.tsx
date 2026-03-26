@@ -8,7 +8,7 @@ interface NoteListProps {
   onDelete: (id: string) => void;
 }
 
-export default function NoteList({ notes }: NoteListProps) {
+export default function NoteList({ notes, onDelete }: NoteListProps) {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
