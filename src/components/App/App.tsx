@@ -59,7 +59,7 @@ export default function App() {
         {data && data.notes.length > 0 && (
           <NoteList
             notes={data.notes}
-            onDelete={(id) => deleteNoteMutation(id)}
+            onDelete={(id: string) => deleteNoteMutation(id)}
           />
         )}
       </main>
