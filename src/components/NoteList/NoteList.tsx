@@ -5,6 +5,7 @@ import css from "./NoteList.module.css";
 
 interface NoteListProps {
   notes: Note[];
+  onDelete: (id: string) => void;
 }
 
 export default function NoteList({ notes }: NoteListProps) {
@@ -27,7 +28,7 @@ export default function NoteList({ notes }: NoteListProps) {
             <span className={css.tag}>{tag}</span>
             <button
               className={css.button}
-              onClick={() => mutate(id)}
+              onClick={() => onDelete(id)}
               disabled={isPending}
             >
               Delete
